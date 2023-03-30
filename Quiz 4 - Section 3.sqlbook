@@ -6,7 +6,7 @@
 <font size = "5">
 Write your name as a comment (use double dash)
 -- SQLBook: Code
-
+-- Parker Shimp
 -- SQLBook: Markup
 <font size = "5" >
 This quiz is open book 
@@ -21,7 +21,7 @@ Write the following message as a comment: <br>
 "I will abide by Emory's code of conduct"
 
 -- SQLBook: Code
-
+-- I will abide by Emory's code of conduct
 -- SQLBook: Markup
 
 <font size = "5">
@@ -42,7 +42,18 @@ HINT: Include any column names with upper case in doube quotations, <br> e.g.
 -- SQLBook: Code
 -- Write your own code
 
+DROP TABLE IF EXISTS pit_stops;
 
+CREATE TABLE pit_stops (
+        "raceId" int,
+        "driverId" int,
+        stop int,
+        lap int,
+        time varchar(255),
+        duration varchar(255),
+        milliseconds int
+
+);
 
 
 -- SQLBook: Markup
@@ -63,9 +74,12 @@ you are running and add a comment that you used the terminal
 -- SQLBook: Code
 -- Write your own code
 
+COPY pit_stops
+FROM '/private/tmp/data_raw/pit_stops.csv'
+WITH (DELIMITER ',', FORMAT csv, HEADER MATCH);
 
-
-
+-- I used the alternative method of using the tmp folder 
+-- with the command open /tmp in the terminal
 -- SQLBook: Markup
 <font size = "5">
 
@@ -84,7 +98,9 @@ least one capital letter with double quotations, e.g. "driverId" <br>
 HINT: See Lecture 17
 -- SQLBook: Code
 -- Write your own code
-
+SELECT * FROM pit_stops
+WHERE (1 <= lap) AND (lap <= 5)
+ORDER BY milliseconds ASC;
 
 
 
@@ -103,6 +119,12 @@ grouped by "driverId" using SELECT, FROM, and GROUP BY.
 HINT: See the end of lectures 17
 -- SQLBook: Code
 -- Write your own code
+SELECT "driverId",
+        MIN(milliseconds) AS min_milliseconds,
+        MAX(milliseconds) AS max_milliseconds
+FROM pit_stops
+GROUP BY "driverId"
+
 
 
 
@@ -126,7 +148,11 @@ quotations it includes a mix of lower case and upper case letters
 -- SQLBook: Code
 -- Write your own code
 
-
+SELECT "driverId",
+        COUNT("driverId") AS num_rows
+FROM pit_stops
+GROUP BY "driverId"
+ORDER BY num_rows DESC 
 
 
 
@@ -144,7 +170,11 @@ number of rows by "driverId" ```GROUP BY``` <br>
  using ```HAVING ```
 -- SQLBook: Code
 -- Write your own code
-
+SELECT "driverId",
+        COUNT("driverId") AS num_rows
+FROM pit_stops
+GROUP BY "driverId"
+HAVING COUNT("driverId")>200
 
 
 

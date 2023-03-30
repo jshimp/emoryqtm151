@@ -39,8 +39,6 @@ Create table from codebook/dictionary
 -- SQL does not allow you to create a table if one already exists
 DROP TABLE IF EXISTS us_congress_members;
 
--- Note in SQL the codebook is also called a "dictionary"
--- The option PRIMARY KEY indicates that this is the unique identifier
 CREATE TABLE us_congress_members (
         member_id    int PRIMARY KEY,
         full_name    varchar(30),
@@ -130,6 +128,9 @@ WITH (DELIMITER ',', FORMAT csv, HEADER MATCH);
 -----  FORMAT indicates that this is a CSV
 -----  HEADER MATCH indicates that the first row contains column
 -----  names and should be ignored when importing.
+COPY us_congress_members
+FROM '/private/tmp/data/us_congress_members.csv'
+WITH (DELIMITER ',', FORMAT csv, HEADER MATCH);
 -- SQLBook: Markup
 <font size = "5">
 
@@ -188,7 +189,9 @@ SELECT * FROM bills_actions
 -- FROM 'D:\GitHub\qtm151spring2023\Lecture 18\data\bills_actions.csv'
 -- WITH (DELIMITER ',', FORMAT csv, HEADER MATCH);
 
-
+COPY bills_actions
+FROM '/private/tmp/data/bills_actions.csv'
+WITH (DELIMITER ',', FORMAT csv, HEADER MATCH);
 -- SQLBook: Markup
 <font size = "5">
 
