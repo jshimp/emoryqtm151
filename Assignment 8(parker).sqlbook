@@ -6,7 +6,7 @@
 <font size = "5">
 Print your name below
 -- SQLBook: Code
-
+-- Parker Shimp
 -- SQLBook: Markup
 
 <font size = "5">
@@ -31,11 +31,21 @@ HINT: Include any column names with upper case in doube quotations, <br> e.g.
 "raceId". If you don't you'll get an error
 -- SQLBook: Code
 -- Write your own code
+DROP TABLE IF EXISTS results1;
 
+CREATE TABLE results1 (
+        "raceId"        int,
+        "driverId"      int,
+        lap             int,
+        position        int,
+        time            varchar(255),
+        milliseconds    int
+);
+-- SQLBook: Code
 
-
-
-
+COPY results1
+FROM '/private/tmp/lap_times.csv'
+WITH (DELIMITER ',', FORMAT csv, HEADER MATCH);
 -- SQLBook: Markup
 <font size = "5">
 
@@ -49,11 +59,24 @@ and  import the data from "data_raw/drivers.csv"
 
 -- SQLBook: Code
 -- Write your own code
+DROP TABLE IF EXISTS drivers1;
 
+CREATE TABLE drivers1 (
+        "driverId"      int PRIMARY KEY,
+        "driverRef"     varchar(255),
+        number          varchar(255),
+        code            varchar(3),
+        forename        varchar(255),
+        surname         varchar(255),
+        dob             varchar(255),
+        nationality     varchar(255),
+        url             varchar(255)
+);
 
-
-
-
+-- SQLBook: Code
+COPY drivers1
+FROM '/private/tmp/drivers.csv'
+WITH (DELIMITER ',', FORMAT csv, HEADER MATCH);
 -- SQLBook: Markup
 <font size = "5">
 
@@ -75,6 +98,9 @@ Hints:
 -- SQLBook: Code
 -- Write your own code
 
+SELECT * FROM drivers1
+WHERE nationality = 'American'
+ORDER BY surname ASC
 
 
 -- SQLBook: Markup
@@ -92,7 +118,9 @@ HINT: Include "driverId" in quotations since it has a mix of <br>
 upper case and lower case letters
 -- SQLBook: Code
 -- Write your own code
-
+SELECT COUNT(DISTINCT 'driverId') AS num_unique_id,
+       COUNT(*) AS num_id       
+FROM drivers1
 
 
 -- SQLBook: Markup
@@ -110,7 +138,11 @@ HINT: Include "driverId" in quotations since it has a mix of <br>
 upper case and lower case letters
 -- SQLBook: Code
 -- Write your own code
-
+SELECT "driverId",
+        AVG(milliseconds) AS mean_milliseconds
+FROM results1
+GROUP BY "driverId"
+ORDER BY mean_milliseconds DESC
 
 
 -- SQLBook: Markup
@@ -129,5 +161,8 @@ HINT: Include "driverId" in quotations since it has a mix of <br>
 upper case and lower case letters
 -- SQLBook: Code
 -- Write your own code
-
+SELECT *
+FROM results1
+LEFT JOIN drivers1
+ON results1."driverId" = drivers1."driverId"
 
